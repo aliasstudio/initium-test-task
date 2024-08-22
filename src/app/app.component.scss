@@ -1,0 +1,14 @@
+@use "src/assets/styles/variables" as *;
+
+.wrapper {
+  padding: $defaultPadding;
+
+  > h1 {
+    color: $accentColor;
+  }
+
+  &__content {
+    background-color: $primaryColor;
+    border-radius: 20px;
+  }
+}

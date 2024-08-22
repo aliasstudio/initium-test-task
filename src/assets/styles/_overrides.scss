@@ -1,0 +1,40 @@
+@use "src/assets/styles/variables" as *;
+
+:root {
+  --mdc-checkbox-state-layer-size: 36px;
+  --mdc-icon-button-state-layer-size: 36px;
+  --mdc-checkbox-selected-focus-state-layer-color: transparent;
+  --mdc-checkbox-selected-hover-state-layer-color: transparent;
+  --mdc-checkbox-selected-pressed-state-layer-color: transparent;
+  --mdc-checkbox-unselected-focus-state-layer-color: transparent;
+  --mdc-checkbox-unselected-hover-state-layer-color: transparent;
+  --mdc-checkbox-unselected-pressed-state-layer-color: transparent;
+}
+
+.mat-icon {
+  height: 18px !important;
+  width: 18px !important;
+}
+
+.mat-mdc-icon-button {
+  &.mat-mdc-button-base {
+    --mdc-icon-button-icon-size: 18px;
+    --mdc-icon-button-state-layer-size: 36px !important;
+    padding: 9px !important;
+  }
+
+  &.mat-accent {
+    --mdc-icon-button-icon-color: #304879 !important;
+    --mat-mdc-button-persistent-ripple-color: #E2EEFF !important;
+    --mat-mdc-button-ripple-color: #B5D3FF !important;
+  }
+}
+
+.mat-mdc-table {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.mat-mdc-row {
+  padding: 0 16px;
+}

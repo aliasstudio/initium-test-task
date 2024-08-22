@@ -1,1 +1,75 @@
-/* You can add global styles to this file, and also import other style files */
+@use "@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@use "@fortawesome/fontawesome-free/scss/regular.scss";
+@use "@fortawesome/fontawesome-free/scss/solid.scss";
+@use 'bootstrap/scss/bootstrap';
+@use '@angular/material' as mat;
+@use "src/assets/styles/variables" as *;
+@use "src/assets/styles/overrides";
+@use "src/assets/styles/vendors";
+@include mat.core();
+
+$initium-palette: (
+  50: #FFFFFF,
+  100: #DADADA,
+  200: #DADADA,
+  300: #A8B0BF,
+  400: #A8B0BF,
+  500: #3C7CF8,
+  600: #2F67D5,
+  700: #194EB6,
+  800: #304879,
+  900: #263238,
+  A100: $primaryColor,
+  A200: $primaryAltColor,
+  A400: $accentColor,
+  A700: $accentAltColor,
+  warn: $warnColor,
+  contrast: (
+    50: #FFFFFF,
+    100: #DADADA,
+    200: #DADADA,
+    300: #A8B0BF,
+    400: #A8B0BF,
+    500: #3C7CF8,
+    600: #2F67D5,
+    700: #194EB6,
+    800: #304879,
+    900: #263238,
+    A100: $primaryColor,
+    A200: $primaryAltColor,
+    A400: $accentColor,
+    A700: $accentAltColor,
+    warn: $warnColor,
+  )
+);
+
+
+$initium-theme: mat.define-light-theme((
+  color: (
+    primary: mat.define-palette($initium-palette, A100, A200),
+    accent: mat.define-palette($initium-palette, A400, A700),
+    warn: mat.define-palette($initium-palette, warn),
+  )
+));
+
+@include mat.all-component-themes($initium-theme);
+
+html, body {
+  height: 100%;
+  background-color: $primaryAltColor;
+}
+body {
+  margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+h1, h2 {
+  font-weight: 500;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 24px;
+}

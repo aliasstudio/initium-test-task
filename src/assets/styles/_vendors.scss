@@ -1,0 +1,7 @@
+@use "src/assets/styles/variables" as *;
+
+.button-container {
+  display: flex;
+  padding: 10px $defaultPadding;
+  gap: 8px;
+}
