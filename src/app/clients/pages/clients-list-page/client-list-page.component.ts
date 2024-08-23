@@ -9,8 +9,11 @@ import { Client } from "@app/clients/models/client";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { ClientFormComponent } from "@app/clients/components/client-form/client-form.component";
 import { HttpClient } from "@angular/common/http";
-import { first, map, tap } from "rxjs";
+import { fromPromise } from "rxjs/internal/observable/innerFrom";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { first, map, of, switchMap, tap } from "rxjs";
+import { db } from "@app/shared/db/db";
+import { DeleteDialogComponent } from "@app/shared/components/delete-dialog/delete-dialog.component";
 
 @Component({
   selector: 'app-client-list-page',
@@ -32,12 +35,23 @@ export class ClientListPageComponent implements OnInit, AfterViewInit {
   private changeDetector = inject(ChangeDetectorRef);
 
   ngOnInit() : void {
-    this.httpClient.get<{ users: Client[] }>('https://test-data.directorix.cloud/task1')
+    // Использовал Dexie для хранения записей в IndexedDB
+    fromPromise(db.clients.toArray())
       .pipe(
-        map(data => data.users),
+        switchMap(users => users.length
+          ? of(users)
+          : this.httpClient.get<{ users: Client[] }>('https://test-data.directorix.cloud/task1')
+            .pipe(
+              // Добавляю в бд записи с бэка, чтобы далее работать с ними локально, т.к. указана только "начальная загрузка записей"
+              map(data => data.users),
+              switchMap(users => db.clients.bulkAdd(users)),
+              switchMap(() => db.clients.toArray()),
+            ),
+        ),
         tap(users => (this.dataSource.data = users)),
         first(), // Получили ответ и отписались, т.к. данные с бэка нужны только при инициализации
-      ).subscribe();
+      )
+      .subscribe();
   }
 
   ngAfterViewInit(): void {
@@ -67,36 +81,62 @@ export class ClientListPageComponent implements OnInit, AfterViewInit {
     // Если есть модель в таблице - прокидываем ссылку в инпут
     const dataSource = this.dataSource;
     const dataItem = dataSource.data.find(el => el === entity);
+
     dataItem && componentRef?.setInput('entity', dataItem);
 
     // Подписываемся на сохранение до уничтожения формы
     instance.onEntitySaved.pipe(takeUntilDestroyed(instance.destroyRef)).subscribe(entity => {
-      const dataItem = dataSource.data.find(el => el === entity);
-
-      // Если нет в таблице - добавляем
-      !dataItem && dataSource.data.push(entity);
-      // Обновляем представление
-      dataSource._updateChangeSubscription();
-      // Ссылка не меняется, поэтому обновляем вручную
-      this.changeDetector.markForCheck();
-
+      this.save(entity);
+      // После сохранения либо закрываем диалог, либо обновляем модель в диалоге
+      // Вариант 1.
+      dialogRef.close();
+      // Вариант 2.
       // Обновляем модель после сохранения, чтобы форма узнала об ее существовании в гриде
-      componentRef?.setInput('entity', entity);
+      // componentRef?.setInput('entity', entity);
     })
   }
 
   protected delete(): void {
-    const dataSource = this.dataSource;
-    this.selection.selected.forEach(entity => {
-      const index = dataSource.data.findIndex(
-        el => el === entity,
-      );
+    const selection = this.selection;
+    const dialogRef = this.dialog.open(DeleteDialogComponent, { data: selection.selected.length });
 
-      if(index !== -1) {
-        this.selection.deselect(entity);
-        dataSource.data.splice(index, 1);
+    dialogRef.afterClosed().pipe(first()).subscribe(isAccepted => {
+      if (isAccepted) {
+        const dataSource = this.dataSource;
+
+        selection.selected.forEach(entity => {
+          db.clients.delete(entity.id).then(() => {
+            const index = dataSource.data.findIndex(el => el === entity);
+
+            if(index !== -1) {
+              selection.deselect(entity);
+              dataSource.data.splice(index, 1);
+              dataSource._updateChangeSubscription();
+              this.changeDetector.markForCheck();
+            }
+          })
+        });
       }
     });
-    dataSource._updateChangeSubscription();
+  }
+
+  private save(entity: Client): void {
+    const updateView = () => {
+      dataSource._updateChangeSubscription();
+      this.changeDetector.markForCheck();
+    }
+    const dataSource = this.dataSource;
+    const dataItem = dataSource.data.find(el => el === entity);
+
+    if(dataItem) {
+      db.clients.put(entity).then(() => updateView())
+    } else {
+      db.clients.add(entity).then(() => {
+        dataSource.data.push(entity);
+        updateView();
+      })
+    }
   }
 }
+
+// При желании весь функционал для формы и таблицы можно перенести в абстрактные директивы с дженериком в виде модели

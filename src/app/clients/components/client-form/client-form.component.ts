@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { MatDialogRef } from "@angular/material/dialog";
+import { MatDialogModule } from "@angular/material/dialog";
 import { FormControlMap } from "@app/shared/utils/types";
 import { Client } from "@app/clients/models/client";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -17,11 +17,12 @@ import * as _ from "lodash";
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
+    MatDialogModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
-    NgIf
+    NgIf,
   ],
 })
 export class ClientFormComponent implements OnChanges {
@@ -30,8 +31,6 @@ export class ClientFormComponent implements OnChanges {
   @Output()
   readonly onEntitySaved = new EventEmitter<Client>();
   readonly destroyRef = inject(DestroyRef);
-
-  protected readonly dialogRef = inject(MatDialogRef<ClientFormComponent>);
 
   get hasChanges(): boolean {
     const formValue = this.form.getRawValue();
@@ -51,7 +50,7 @@ export class ClientFormComponent implements OnChanges {
     const value = this.form.value as Client;
     const entity = this.entity;
 
-    this.onEntitySaved.emit(entity ? Object.assign(entity, value) : value);
+    this.onEntitySaved.emit(entity ? _.assign(entity, value) : value);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

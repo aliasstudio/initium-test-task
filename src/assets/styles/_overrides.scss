@@ -51,15 +51,27 @@
 
 .mat-mdc-row {
   padding: 0 16px;
-}
 
-.mat-mdc-row.selected {
-  background-color: $primaryAltColor;
+  &.selected {
+    background-color: $primaryColor;
+  }
+
+  &:hover {
+    background-color: #F6F9FF;
+  }
 }
 
 .mat-column-select {
   width: 52px;
   padding-right: 0;
+}
+
+.mat-mdc-cell {
+  span:hover {
+    text-decoration: underline;
+    color: $accentAltColor;
+    cursor: pointer;
+  }
 }
 
 .mat-mdc-dialog-container {
@@ -95,10 +107,16 @@
   }
 }
 
-.mat-mdc-button {
+.mat-mdc-button, .mdc-button--unelevated {
   --mdc-text-button-container-shape: 36px;
+  --mdc-filled-button-container-shape: 36px;
 
   &.mat-mdc-button-base {
     padding: 24px 16px;
   }
+}
+
+.mat-mdc-unelevated-button[disabled][disabled] {
+  --mdc-filled-button-disabled-container-color: #{$buttonDisabled};
+  --mdc-filled-button-disabled-label-text-color: white;
 }
