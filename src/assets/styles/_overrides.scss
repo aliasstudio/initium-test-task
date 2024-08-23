@@ -2,10 +2,11 @@
 
 .mdc-checkbox {
   --mdc-checkbox-state-layer-size: 36px;
-  // В макете не было Hover'ов, поэтому убрал
+
   --mdc-checkbox-unselected-icon-color: #{$checkBoxUnselected};
   --mdc-checkbox-unselected-hover-icon-color: #{$checkBoxUnselected};
   --mdc-checkbox-unselected-focus-icon-color: #{$checkBoxUnselected};
+  // В макете не было ripple, поэтому убрал
   --mdc-checkbox-selected-focus-state-layer-color: transparent;
   --mdc-checkbox-selected-hover-state-layer-color: transparent;
   --mdc-checkbox-selected-pressed-state-layer-color: transparent;
@@ -52,6 +53,10 @@
   padding: 0 16px;
 }
 
+.mat-mdc-row.selected {
+  background-color: $primaryAltColor;
+}
+
 .mat-column-select {
   width: 52px;
   padding-right: 0;
@@ -62,15 +67,38 @@
 }
 
 .mat-mdc-form-field {
-  --mdc-outlined-text-field-caret-color: #BBC5C9;
+  --mdc-outlined-text-field-caret-color: #{$themeBlack};
   --mdc-outlined-text-field-label-text-color: #BBC5C9;
   --mdc-outlined-text-field-outline-color: #BBC5C9;
-  --mdc-outlined-text-field-hover-label-text-color: #{$themeBlack};
-  --mdc-outlined-text-field-hover-outline-color: #{$themeBlack};
+
   --mdc-outlined-text-field-focus-label-text-color: #{$accentColor};
   --mdc-outlined-text-field-focus-outline-color: #{$accentColor};
 
+  --mat-form-field-subscript-text-size: 12px;
+
   .mdc-text-field--outlined {
     --mdc-outlined-text-field-focus-outline-width: 1px;
+
+    &:not(.mdc-text-field--disabled) {
+      .mdc-floating-label--float-above {
+        --mdc-outlined-text-field-label-text-color: #{$themeBlack};
+      }
+
+      &:has(.mdc-floating-label--float-above) { // либо .mat-mdc-form-field.ng-dirty , но будет выделять и без значения, либо навешивать класс по условию
+        --mdc-outlined-text-field-outline-color: #{$themeBlack};
+      }
+    }
+  }
+
+  mat-error {
+    text-align: right;
+  }
+}
+
+.mat-mdc-button {
+  --mdc-text-button-container-shape: 36px;
+
+  &.mat-mdc-button-base {
+    padding: 24px 16px;
   }
 }

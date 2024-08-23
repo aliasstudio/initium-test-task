@@ -1,27 +1,31 @@
 <div class="form-wrapper">
   <div class="form-wrapper_title">
-    <h1>{{ dialogOptions.title }}</h1>
+    <h1>{{ entity ? 'Редактирование' : 'Новый клиент' }}</h1>
   </div>
   <form [formGroup]="form">
     <mat-form-field appearance="outline">
       <mat-label>Имя</mat-label>
       <input matInput formControlName="name">
+      <mat-error *ngIf="form.get('name')?.hasError('minlength')">Минимальное количество символов: 2</mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Фамилия</mat-label>
       <input matInput formControlName="surname">
+      <mat-error *ngIf="form.get('surname')?.hasError('minlength')">Минимальное количество символов: 2</mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
       <input matInput formControlName="email">
+      <mat-error *ngIf="form.get('email')?.hasError('pattern')">Некорректный адрес</mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Телефон</mat-label>
       <input matInput formControlName="phone">
+      <mat-error *ngIf="form.get('phone')?.hasError('pattern')">Некорректный номер телефона</mat-error>
     </mat-form-field>
   </form>
   <div class="d-flex justify-content-end gap-3">
-    <button mat-button>Отмена</button>
-    <button mat-button>Сохранить</button>
+    <button mat-button color="accent" (click)="dialogRef.close()">Отмена</button>
+    <button mat-button color="accent" [disabled]="!form.enabled || !form.valid || !hasChanges" (click)="save()">Сохранить</button>
   </div>
 </div>
