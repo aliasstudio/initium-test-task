@@ -1,8 +1,8 @@
 <div class="button-container">
-  <button mat-icon-button color="accent">
+  <button mat-icon-button color="accent" (click)="add()">
     <mat-icon fontSet="far" fontIcon="fa-square-plus" />
   </button>
-  <button mat-icon-button color="accent">
+  <button mat-icon-button color="accent" [disabled]="!selection.hasValue()">
     <mat-icon fontSet="far" fontIcon="fa-trash-can" />
   </button>
 </div>

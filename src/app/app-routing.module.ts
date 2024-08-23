@@ -1,12 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ClientsListPageComponent } from "@app/clients/pages/clients-list-page/clients-list-page.component";
+import { ClientListPageComponent } from "@app/clients/pages/clients-list-page/client-list-page.component";
 
 const routes: Routes = [
   {
+    path : '**' ,
+    redirectTo : '' ,
+    pathMatch : 'full'
+  },
+  {
     path: '',
     title: 'Клиенты',
-    component: ClientsListPageComponent,
+    component: ClientListPageComponent,
   },
 ]
 

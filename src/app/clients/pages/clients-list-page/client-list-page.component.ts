@@ -1,17 +1,14 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, inject, ViewChild} from '@angular/core';
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { MatSort, MatSortModule } from "@angular/material/sort";
 import { SelectionModel } from "@angular/cdk/collections";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
-
-export interface Client {
-  name: string;
-  surname: string;
-  email: string;
-  phone: string;
-}
+import { Client } from "@app/clients/models/client";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import {ClientFormComponent} from "@app/clients/components/client-form/client-form.component";
+import {FormDialogData} from "@app/shared/types";
 
 const ELEMENT_DATA: Client[] = [
   { name: "Александр", surname: "Петров", email: "petrov@mail.ru", phone: "+79061856195" },
@@ -22,36 +19,42 @@ const ELEMENT_DATA: Client[] = [
 ];
 
 @Component({
-  selector: 'app-clients-list-page',
-  templateUrl: './clients-list-page.component.html',
-  styleUrls: ['./clients-list-page.component.scss'],
+  selector: 'app-client-list-page',
+  templateUrl: './client-list-page.component.html',
+  styleUrls: ['./client-list-page.component.scss'],
   standalone: true,
-  imports: [MatTableModule, MatSortModule, MatCheckboxModule, MatButtonModule, MatIconModule],
+  imports: [MatTableModule, MatSortModule, MatCheckboxModule, MatButtonModule, MatIconModule, MatDialogModule],
 })
-export class ClientsListPageComponent implements AfterViewInit {
+export class ClientListPageComponent implements AfterViewInit {
   @ViewChild(MatSort) protected sort!: MatSort;
 
   protected displayedColumns: string[] = ['select', 'name', 'surname', 'email', 'phone'];
   protected dataSource = new MatTableDataSource<Client>(ELEMENT_DATA);
   protected selection = new SelectionModel<Client>(true, []);
 
-  ngAfterViewInit() {
+  private dialog = inject(MatDialog);
+
+  ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
   }
 
-  protected isAllSelected() {
+  protected isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
 
     return numSelected === numRows;
   }
 
-  protected toggleAllRows() {
+  protected toggleAllRows(): void {
     if (this.isAllSelected()) {
       this.selection.clear();
       return;
     }
 
     this.selection.select(...this.dataSource.data);
+  }
+
+  protected add(): void {
+    this.dialog.open(ClientFormComponent, { data: { options: { title: 'Новый клиент' } } as FormDialogData<Client> });
   }
 }

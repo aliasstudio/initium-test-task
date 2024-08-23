@@ -1,0 +1,27 @@
+<div class="form-wrapper">
+  <div class="form-wrapper_title">
+    <h1>{{ dialogOptions.title }}</h1>
+  </div>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline">
+      <mat-label>Имя</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Фамилия</mat-label>
+      <input matInput formControlName="surname">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Телефон</mat-label>
+      <input matInput formControlName="phone">
+    </mat-form-field>
+  </form>
+  <div class="d-flex justify-content-end gap-3">
+    <button mat-button>Отмена</button>
+    <button mat-button>Сохранить</button>
+  </div>
+</div>

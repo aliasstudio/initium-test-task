@@ -4,8 +4,6 @@
 @use 'bootstrap/scss/bootstrap';
 @use '@angular/material' as mat;
 @use "src/assets/styles/variables" as *;
-@use "src/assets/styles/overrides";
-@use "src/assets/styles/vendors";
 @include mat.core();
 
 $initium-palette: (
@@ -53,6 +51,8 @@ $initium-theme: mat.define-light-theme((
 ));
 
 @include mat.all-component-themes($initium-theme);
+@import "src/assets/styles/overrides";
+@import "src/assets/styles/main";
 
 html, body {
   height: 100%;

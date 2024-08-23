@@ -1,0 +1,13 @@
+.form-wrapper {
+  min-width: 450px;
+  padding: 40px;
+
+  form {
+    --mat-form-field-subscript-text-line-height: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: calc(40px - var(--mat-form-field-subscript-text-line-height));
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+}

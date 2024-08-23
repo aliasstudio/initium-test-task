@@ -3,7 +3,10 @@
 .wrapper {
   padding: $defaultPadding;
 
-  > h1 {
+  &_title {
+    display: flex;
+    align-items: center;
+    height: 80px;
     color: $accentColor;
   }
 

@@ -1,8 +1,11 @@
-@use "src/assets/styles/variables" as *;
+@use "variables" as *;
 
-:root {
+.mdc-checkbox {
   --mdc-checkbox-state-layer-size: 36px;
-  --mdc-icon-button-state-layer-size: 36px;
+  // В макете не было Hover'ов, поэтому убрал
+  --mdc-checkbox-unselected-icon-color: #{$checkBoxUnselected};
+  --mdc-checkbox-unselected-hover-icon-color: #{$checkBoxUnselected};
+  --mdc-checkbox-unselected-focus-icon-color: #{$checkBoxUnselected};
   --mdc-checkbox-selected-focus-state-layer-color: transparent;
   --mdc-checkbox-selected-hover-state-layer-color: transparent;
   --mdc-checkbox-selected-pressed-state-layer-color: transparent;
@@ -11,22 +14,28 @@
   --mdc-checkbox-unselected-pressed-state-layer-color: transparent;
 }
 
-.mat-icon {
-  height: 18px !important;
-  width: 18px !important;
-}
-
 .mat-mdc-icon-button {
+  .mat-icon {
+    height: 18px;
+    width: 18px;
+  }
+
   &.mat-mdc-button-base {
     --mdc-icon-button-icon-size: 18px;
-    --mdc-icon-button-state-layer-size: 36px !important;
-    padding: 9px !important;
+    --mdc-icon-button-state-layer-size: 36px;
+    padding: calc(var(--mdc-icon-button-icon-size) / 2);
+  }
+
+  &[disabled][disabled] {
+    --mdc-icon-button-disabled-icon-color: #{$iconDisabled};
   }
 
   &.mat-accent {
-    --mdc-icon-button-icon-color: #304879 !important;
-    --mat-mdc-button-persistent-ripple-color: #E2EEFF !important;
-    --mat-mdc-button-ripple-color: #B5D3FF !important;
+    --mdc-icon-button-icon-color: #{$iconDefault};
+
+    &:hover {
+      background-color: $iconHover;
+    }
   }
 }
 
@@ -35,6 +44,33 @@
   overflow: hidden;
 }
 
+.mat-mdc-header-row {
+  --mat-table-header-headline-color: #{$accentAltColor};
+}
+
 .mat-mdc-row {
   padding: 0 16px;
+}
+
+.mat-column-select {
+  width: 52px;
+  padding-right: 0;
+}
+
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-shape: 20px !important;
+}
+
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-caret-color: #BBC5C9;
+  --mdc-outlined-text-field-label-text-color: #BBC5C9;
+  --mdc-outlined-text-field-outline-color: #BBC5C9;
+  --mdc-outlined-text-field-hover-label-text-color: #{$themeBlack};
+  --mdc-outlined-text-field-hover-outline-color: #{$themeBlack};
+  --mdc-outlined-text-field-focus-label-text-color: #{$accentColor};
+  --mdc-outlined-text-field-focus-outline-color: #{$accentColor};
+
+  .mdc-text-field--outlined {
+    --mdc-outlined-text-field-focus-outline-width: 1px;
+  }
 }
